@@ -1,0 +1,408 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Bulletin Subscription Service | Dexter Press</title>
+</head>
+<style>
+	input[type=radio], input[type=checkbox] {
+  		display:none;
+	}
+	a {
+		color: #F1772D;
+		text-decoration: underline;
+	}
+	.content {
+		padding: 10px;
+		position:relative;
+		width:675px;
+		margin:0 auto;
+		background-color:white;
+		font-family:sans-serif;
+		color:#555;
+		font-size:10pt;
+	}
+	.line {
+		font-weight:700;
+		text-align:;
+		font-size:16pt;
+		margin-left:30px;
+		width:580px;
+		float:none;
+		position:absolute;
+		top:0px;
+		left:50%;
+		transform:translate(-290px);
+		opacity:0;
+		transition:all 250ms ease-in-out;
+	}
+
+	#c1>div.line, #c2>div.line, #c3>div.line, #c4>div.line, #c5>div.line {
+		user-select:none;
+		z-index:0;
+		top:3px;
+	}
+	#r2:checked ~ * #c1>div.line, #r3:checked ~ * #c2>div.line, #r4:checked ~ * #c3>div.line, #r5:checked ~ * #c4>div.line {
+		margin-left:-30px;
+	}
+
+	#r1:checked ~ #l2:after, #r2:checked ~ #l3:after, #r3:checked ~ #l4:after, #r4:checked ~ #l5:after {
+		content:">";
+		color: white;
+		font-weight:700;
+		position: absolute;
+		top:15px;
+		left:50%;
+		transform:translate(315px);
+		cursor:pointer;
+		font-size:15pt;
+		opacity:1;
+		transition: all 300ms ease-in-out;
+		z-index:2;
+	}
+
+	#r2:checked ~ #l1:after,#r3:checked ~ #l2:after, #r4:checked ~ #l3:after, #r5:checked ~ #l4:after {
+		content:"<";
+		color: white;
+		font-weight:700;
+		position: absolute;
+		top:15px;
+		left:50%;
+		transform:translate(-326px);
+		cursor:pointer;
+		font-size:15pt;
+		opacity:1;
+		transition: all 300ms ease-in-out;
+		z-index:2;
+	}
+
+	#r1:checked ~ .arrow-back, #r5:checked ~ .arrow-forward {
+		opacity:0;
+	}
+
+	.arrow-forward, .arrow-back {
+		background-color: #56D379;
+		height:30px;
+		width: 30px;
+		position: absolute;
+		top:18px;
+		left:50%;
+		transform-origin:center;
+		border-radius:15px;
+		display:block;
+		transition: all 300ms ease-in-out;
+		opacity:1;
+	}
+	.arrow-forward {
+		transform:translate(305px, -5px);
+	}
+	.arrow-back {
+		transform:translate(-334px, -5px);
+	}
+
+
+	#r1:checked ~ #l1, #r2:checked ~ #l2, #r3:checked ~ #l3, #r4:checked ~ #l4, #r5:checked ~ #l5 {
+		color:green;
+	}
+
+	#r1:checked ~ * #c1>div.line, #r2:checked ~ * #c2>div.line, #r3:checked ~ * #c3>div.line, #r4:checked ~ * #c4>div.line, #r5:checked ~ * #c5>div.line {
+		opacity: 1;
+		margin-left:0px;
+	}
+
+
+	.arrowbox {
+		position: relative;
+		width: calc(97%% - 40px);
+		height: 140px;
+		left: 0;
+		padding: 20px;
+		margin-top:26px;
+		background: white;
+		border: #F1772D solid 1px;
+		transition: height 300ms ease-in-out; left 400ms cubic-bezier(0.27, 0.16, 0.42, 1.39); opacity 300ms ease-in-out;
+		opacity: 1;
+	}
+	.arrowbox:before {
+		content: "";
+		position: absolute;
+		top: -23px;
+		left: 20%;
+		transition: all 300ms ease-in-out;
+		border-style: solid;
+		border-width: 0 25px 25px;
+		border-color: #FFF transparent;
+		display: block;
+		width: 0px;
+		height:0;
+		z-index: 1;
+		transform:scale(1.11);
+	}
+
+	.arrowbox:after {
+		content: "";
+		position: absolute;
+		top: -26px;
+		left: calc(20% - 1px);
+		transition: all 300ms ease-in-out;
+		border-style: solid;
+		border-width: 0 26px 26px;
+		border-color: #F1772D transparent;
+		display: block;
+		width: 0;
+		z-index: 0;
+	}
+
+	.arrowbox-content {
+		position:absolute;
+		top:20px;
+		padding-right:20px;
+		opacity:0;
+		color: #555;
+		transition: all 300ms ease-in-out;
+}
+	.series-image-box {
+		background-color:grey;
+		width:49.7%;
+		height:200px;
+		display:inline-block;
+		transition: all 300ms ease-in-out;
+		cursor: pointer;
+		border-radius: 0px;
+		overflow:hidden;
+		opacity:1;
+		filter: brightness(100%);
+		transition: all 300ms ease-in-out;
+}
+	#no-series:checked ~ div.arrowbox {
+		height:0px;
+		opacity:0;
+		padding:0px;
+		margin-top:0px;
+	}
+	#diw-series:checked ~ div.arrowbox, #wow-series:checked ~ div.arrowbox {
+		height: ;
+	}
+	#diw-series:checked ~ * #diw-content>div.arrowbox-content, #wow-series:checked ~ * #wow-content>div.arrowbox-content {
+  		opacity: 1;
+	}
+	#diw-series:checked ~ * #wow-content>div.arrowbox-content, #wow-series:checked ~ * #diw-content>div.arrowbox-content {
+  		display: none;
+	}
+
+	#wow-series:checked ~ div.arrowbox:before {
+		left:calc(80% - 52px);
+	}
+	#wow-series:checked ~ div.arrowbox:after {
+		left:calc(80% - 1px - 52px);
+	}
+
+	#diw-series:checked ~ * #diw-selector>div.series-image-box {
+		filter: brightness(80%);
+	}
+	#wow-series:checked ~ * #wow-selector>div.series-image-box {
+		filter: brightness(80%);
+	}
+	#no-selector {
+		opacity:0;
+		color:darkgray;
+		position:absolute;
+		bottom:20px;
+		right:20px;
+		cursor:pointer;
+		z-index:15;
+	}
+	#diw-series:checked ~ * #no-selector, #wow-series:checked ~ * #no-selector {
+		opacity:1;
+	}
+
+	.slide-img {
+		position:absolute;
+		top:0px;
+		width:calc(100% - 20px);
+	}
+
+	#slide-1 {
+		animation:sa1 8s infinite 3s;
+	}
+
+	#slide-2 {
+		opacity:0;
+		animation:sa2 8s infinite 3s;
+	}
+
+	@keyframes sa1 {
+		0% {
+			opacity:1;
+		}
+		12.5% {
+			opacity:0;
+		}
+		50% {
+			opacity:0;
+		}
+		62.5% {
+			opacity:1;
+		}
+		100% {
+			opacity:1;
+		}
+	}
+
+	@keyframes sa2 {
+		0% {
+			opacity:0;
+		}
+		12.5% {
+			opacity:1;
+		}
+		50% {
+			opacity:1;
+		}
+		62.5% {
+			opacity:0;
+		}
+		100% {
+			opacity:0;
+		}
+	}
+
+	table {
+		background-color:;
+		border:1px solid #666;
+		border-collapse: collapse;
+	}
+	th {
+		background-color: #F1772D;
+		color:white;
+		border:1px solid #666;
+	}
+	td {
+		background-color: white;
+		border:1px solid #666;
+	}
+	.basic-header {
+		font-size:18px;
+		color:;
+		margin-bottom:10px;
+		font-weight:600;
+	}
+	</style>
+
+<body style="margin:0 auto;" bgcolor="#FBFBFB">
+
+	<div class="content" style="height:140px;">
+		<img src="images/dp/visually-enhance_slider.png" class="slide-img" id="slide-1">
+		<img src="images/dp/weekly-bulletin_slider.png" class="slide-img" id="slide-2">
+	</div>
+
+	<div class="content">
+		<br/>
+		When you sign up for our Weekly Bulletin Subscription Service, you'll begin receiving compelling artistic compositions for your church, designed to re&ndash;enforce the message of Jesus Christ during your worship services. Each bulletin design is meticulously crafted around the mission of your church. Our designs are relevant and widely loved by the many members that attend the 8,000+ churches we serve around the world!
+	</div>
+
+
+	<div class="content">
+		<div class="basic-header">Our bulletins come in two styles...</div>
+	<input type="radio" name="series-selection" id="no-series" checked>
+	<input type="radio" name="series-selection" id="diw-series">
+	<input type="radio" name="series-selection" id="wow-series">
+
+	<div>
+	<label for="diw-series" id="diw-selector"><div class="series-image-box"><img src="images/dp/diw-box.jpg"></div></label>
+	<label for="wow-series" id="wow-selector"><div class="series-image-box"><img src="images/dp/wow-box.jpg"></div></label><br/><label for="no-series" id="no-selector">X</label>
+		</div>
+	<div class="arrowbox">
+		<div id="diw-content"><div class="arrowbox-content">
+			<strong>Designs In Worship</strong><br/>Designs in Worship is our scenic imagery series that features landscape and nature elements. Scripture passages and graphics are selected based on church celebrations &#40;Easter/Christmas&#41; and yearly calendars. Designs match the KJV and NIV translations of the Bible.<br/><br/>Available in Response-Tab and Tri-Fold as well. See pricing below.<br/><br/><a href="http://www.dexterpress.com/DIW2018" target="_blank">View the 2018 Designs in Worship Catalog</a></div></div>
+		<div id="wow-content"><div class="arrowbox-content"><strong>Windows of Worship</strong><br/>Windows of Worship is our series of designs that follow the Revised Common Lectionary of Scripture readings. We choose verses that come from the current year's reading plan for that current Sunday. Our imagery varies slightly from DIW in that we will feature imagery of people and congregations depicting a daily Christian walk. We also feature some beautiful landscape-type images as well.<br/><br/>Available in Letter and Legal Sizes<br/><br/><a href="http://www.dexterpress.com/WOW2018" target="_blank">View the 2018 Windows of Worship Catalog</a></div></div>
+	</div>
+	</div>
+
+	<div class="content">
+		<input type="radio" id="r1" name="test" value="1"  checked>
+		<input type="radio" id="r2" name="test" value="2" >
+		<input type="radio" id="r3" name="test" value="3" >
+		<input type="radio" id="r4" name="test" value="4" >
+		<input type="radio" id="r5" name="test" value="5" >
+
+
+		<div class="arrow-forward"></div>
+		<div class="arrow-back"></div>
+		<label for="r1" id="l1"></label>
+		<label for="r2" id="l2"></label>
+		<label for="r3" id="l3"></label>
+		<label for="r4" id="l4"></label>
+		<label for="r5" id="l5"></label>
+
+		<div>
+			<div id="c1"><div class="line">Churches of any size and denomination love our beautiful Sunday bulletin designs!</div></div>
+			<div id="c2"><div class="line">Subscribers enjoy the reduced costs on their weekly bulletins compared to buying stock (40% less).</div></div>
+			<div id="c3"><div class="line">We make the ordering process hassle-free. Talk to a real person when you call.</div></div>
+			<div id="c4"><div class="line">Your bulletins are delivered on time every quarter to your church&nbsp;office.</div></div>
+			<div id="c5"><div class="line">You have control over your product options, and can cancel at any time.</div></div>
+		</div>
+<br><br>
+	</div>
+
+		<div class="content">
+			<br/>
+			<div class="basic-header">Options &amp; Pricing</div>
+			<table width="100%" cellspacing="0px" cellpadding="5px">
+				<tr>
+				<th align="left" valign="top">Format Options</th>
+				<th align="right" valign="top">Price/100</th>
+				<th align="left" valign="top">Bible Version Options</th>
+				<th align="left" valign="top">Back Page Options</th>
+				</tr>
+			<tr>
+				<td align="left" valign="top">DIW 8 1/2" x 11" Full Picture</td>
+				<td align="right" valign="top">$6.15</td>
+				<td align="left" valign="top">KJV or NIV</td>
+				<td align="left" valign="top">Blank or With Scripture</td>
+			</tr>
+			<tr>
+				<td align="left" valign="top">DIW 8 1/2" x 11" Front Panel</td>
+				<td align="right" valign="top">$6.15</td>
+				<td align="left" valign="top">KJV or NIV</td>
+				<td align="left" valign="top">Blank or With Scripture</td>
+			</tr>
+			<tr>
+				<td align="left" valign="top">DIW 8 1/2" x 14" Response Tab</td>
+				<td align="right" valign="top">$7.35</td>
+				<td align="left" valign="top">KJV or NIV</td>
+				<td align="left" valign="top">Blank</td>
+			</tr>
+			<tr>
+				<td align="left" valign="top">DIW 8 1/2" x 14" Tri-Panel</td>
+				<td align="right" valign="top">$7.35</td>
+				<td align="left" valign="top">KJV or NIV</td>
+				<td align="left" valign="top">Blank</td>
+			</tr>
+			<tr>
+				<td align="left" valign="top">WOW 8 1/2" x 11" Full Picture</td>
+				<td align="right" valign="top">$6.15</td>
+				<td align="left" valign="top">NRSV Only</td>
+				<td align="left" valign="top">Blank or With Scripture</td>
+			</tr>
+			<tr>
+				<td align="left" valign="top">WOW 8 1/2" x 14" Side Panel (Color Bar)</td>
+				<td align="right" valign="top">$7.35</td>
+				<td align="left" valign="top">NRSV Only</td>
+				<td align="left" valign="top">Blank or With Scripture</td>
+			</tr>
+			</table>
+		</div>
+	<div class="content">
+		<br/>
+		<div class="basic-header">How do you get started?</div>
+		<ul>
+			<li>Select the series and size that best fits your church's worship style.</li>
+			<li>Determine the number of bulletins your church will need each Sunday (can be ordered in packs of 50).</li>
+			<li>Choose the quarter you would like your series to begin.</li>
+			<li>Call us Toll-free at 1-866-563-2425.</li>
+		</ul>
+	</div>
+
+</body>
+</html>

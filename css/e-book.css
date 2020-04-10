@@ -1,0 +1,161 @@
+body, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Helvetica','Arial',sans-serif;
+  color: #4d4d4d;
+}
+
+h1 {
+  font-weight: 700;
+  font-size: 2.25rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+body {
+  background-color: #017CBA;
+}
+
+.container {
+  border: solid 1px white;
+  box-shadow: -2px 4px 30px rgba(0,0,0,.4);
+}
+
+/* S E C T I O N S */
+
+#headline {
+  padding: .75rem;
+}
+
+#headline p a {
+  color: #ec66a5;
+  font-weight: 700;
+  transition: all ease-in-out 200ms;
+}
+
+#headline p a:hover {
+  color: #d63e86;
+  text-decoration: none;
+}
+
+#desc, #form {
+  background-color: #f4f4f4;
+  padding: 1rem;
+  text-align: left;
+}
+
+ul.feature-list {
+  padding: 7px 0 0;
+  margin: 0;
+  list-style: none;
+  text-align: left;
+  margin-left: 1.4em;
+}
+
+ul.feature-list li:before {
+  content: "✔";
+  margin-right: -.8em;
+  color: #ec66a5;
+  position: relative;
+  left: -1.4em;
+}
+
+.form-group label {
+  opacity: 0.7;
+}
+
+input[type=submit] {
+  background-color: #ec66a5;
+  font-weight: 700;
+  color: white;
+  transition: all ease-in-out 300ms;
+}
+
+input[type=submit]:hover {
+  background-color: #d63e86;
+}
+input[type=submit]:active {
+  background-color: #d63e86;
+  color: rgba(255,255,255,.8);
+}
+
+/* A N I M A T I O N S */
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+@-webkit-keyframes bounceInDown {
+  from, 60%, 75%, 90%, to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -3000px, 0);
+    transform: translate3d(0, -3000px, 0);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 25px, 0);
+    transform: translate3d(0, 25px, 0);
+  }
+
+  75% {
+    -webkit-transform: translate3d(0, -10px, 0);
+    transform: translate3d(0, -10px, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(0, 5px, 0);
+    transform: translate3d(0, 5px, 0);
+  }
+
+  to {
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+@keyframes bounceInDown {
+  from, 60%, 75%, 90%, to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -3000px, 0);
+    transform: translate3d(0, -3000px, 0);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 25px, 0);
+    transform: translate3d(0, 25px, 0);
+  }
+
+  75% {
+    -webkit-transform: translate3d(0, -10px, 0);
+    transform: translate3d(0, -10px, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(0, 5px, 0);
+    transform: translate3d(0, 5px, 0);
+  }
+
+  to {
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+.bounceInDown {
+  -webkit-animation-name: bounceInDown;
+  animation-name: bounceInDown;
+}

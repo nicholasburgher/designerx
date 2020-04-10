@@ -1,0 +1,335 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Dexter Text-Only Signature Builder</title>
+<link rel="stylesheet" type="text/css" href="css/toggleswitch.css">
+<style type="text/css">
+#page-title {
+	font-size:20px;
+	font-weight: 500;
+	font-family:'Helvetica', sans-serif;
+	color: #777;
+	text-transform:uppercase;
+	padding-bottom:10px;
+}
+form {
+	max-width:420px;
+	transition:all 200ms ease-in-out;
+}
+form:hover {
+	max-width: 426px;
+}
+.button {
+  background: #223E62;
+  border-radius:6px;
+  display: inline-block;
+  padding:10px 25px;
+  margin-top:5px;
+  color: white;
+  /* text-transform: uppercase;*/
+  font-family: 'Helvetica', sans-serif;
+  cursor: pointer;
+  font-size:14px;
+  font-weight:300;
+  transition:all 300ms ease-in-out;
+  transform: scale(1);
+}
+.button:hover {
+	background: #017cba;
+	transform: scale(1.02);
+}
+	#I-Beam {
+		color:#DDD;
+		transition:all 300ms ease-in-out;
+	}
+#I-Beam:hover {
+		color:white;
+	    cursor: pointer;
+	}
+
+label {
+	display:block;
+    font-family:'Helvetica', sans-serif;
+	font-weight:300;
+	text-transform:uppercase;
+	color:#777;
+	font-size:13px;
+	margin:10px 0 5px;
+}
+label.label {
+	display: inline-block;
+}
+input {
+	display:inline;
+	border: 1px solid #aaa;
+	border-radius:2px;
+	height:22px;
+	font-size: 14px;
+}
+input[type="text"] {
+	width: 250px;
+}
+#emailSignature {
+  float:left;
+}
+.codebox {
+  width:380px;
+  height:300px;
+  border:0px solid black;
+  overflow: scroll;
+  padding:5px;
+  font-family: courier;
+  font-size:11px;
+}
+.clear {
+  clear:both;
+  line-height:0;
+  visibility:hidden;
+}
+#b_field {
+  margin-bottom: 15px;
+  transform: scale(0.9);
+  transform-origin:left;
+  transition: all 300ms ease-in-out;
+}
+#version {
+	z-index: 3;
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	text-align:right;
+	font-family:sans-serif;
+	font-size:10px;
+	color:#666;
+}
+.hidden {
+	display:none;
+}
+</style>
+
+<script type="text/javascript">
+var QueryString = function () {
+  // This function is anonymous, is executed immediately and 
+  // the return value is assigned to QueryString!
+  var query_string = {};
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i=0;i<vars.length;i++) {
+    var pair = vars[i].split("=");
+        // If first entry with this name
+    if (typeof query_string[pair[0]] === "undefined") {
+      query_string[pair[0]] = decodeURIComponent(pair[1]);
+        // If second entry with this name
+    } else if (typeof query_string[pair[0]] === "string") {
+      var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
+      query_string[pair[0]] = arr;
+        // If third or later entry with this name
+    } else {
+      query_string[pair[0]].push(decodeURIComponent(pair[1]));
+    }
+  } 
+  return query_string;
+  for (i=0; i<vars; i++) {
+	  query_string.replace(/+/g,' ');
+  }
+}();
+
+	window.onload = function(){
+      var modDate = document.lastModified;
+      var modString = modDate.toString();
+      console.log(modString);
+      var trimmed = modString.substring(0, 10);
+      console.log(trimmed);
+      document.getElementById("modDate").innerHTML = trimmed;
+		var anchors = document.getElementById('emailSignature').getElementsByTagName('a');
+  for (var i=0; i<anchors.length; i++){
+    anchors[i].setAttribute('target', '_blank');
+  }
+  document.form1.brands.value = plusFix(QueryString.brands);
+  document.form1.name.value = plusFix(QueryString.name);
+  document.form1.title.value = plusFix(QueryString.title);
+  document.form1.address.value = plusFix(QueryString.address);
+  document.form1.other.value = plusFix(QueryString.other);
+  document.form1.phone.value = plusFix(QueryString.phone);
+  document.form1.mobile.value = plusFix(QueryString.mobile);
+  document.form1.email.value = plusFix(QueryString.email);
+  document.form1.bannerOptions.value = plusFix(QueryString.bannerOptions);
+		
+  if (QueryString.m_enabler=="1") {
+	  update(document.getElementById("mobile").value, "mobile"); 
+	  update(document.getElementById("mobile").value, "mobile"); 
+  } else {
+	  document.getElementById("m_enable").checked = false;
+	  check_mobile(document.getElementById("m_enable"));
+	  
+  };
+  
+  var ben = document.getElementById("b_enable");
+  var bopt = document.getElementById("bannerOptions");
+  if (QueryString.b_enabler=="1") {
+	  ben.checked = true;
+  }  else {};
+		
+  update_brand(QueryString.brands, "branding");
+  update(document.getElementById("name").value, "name");
+  update(document.getElementById("title").value, "title");
+	//address update	
+  var ads = document.getElementById("address");
+  if (ads.selectedIndex == 3) { update(document.getElementById("other_address").value, "address");
+  document.getElementById("other").classList.remove("hidden"); }
+  else { update(ads.options[ads.selectedIndex].innerHTML, "address"); }
+		
+  update(document.getElementById("phone").value, "phone");
+  update(document.getElementById("email").value, "email");
+  contact_update(QueryString.email);
+}
+	
+    function plusFix(str) {
+		var k = "+";
+  		var nk = " ";
+		var newStr = str.split(k).join(nk);
+		return newStr;
+	}	
+	function showfield(v) {
+		if(v=='other')document.getElementById('other').classList.remove("hidden");
+		else document.getElementById('other').classList.add("hidden");
+	}
+	function print_html() {
+  		document.getElementById("outputHTML").innerText = document.getElementById("emailSignature").innerHTML;
+		document.getElementById("ssc_button").innerHTML = "update source code";
+}
+	function update(a,b) {
+		document.getElementById(b + "_field").innerHTML = a;
+	}
+	function update_brand(c,d) {
+		var ic = "_icon";
+		var lnk = "_link";
+		if (c=='ASH') {
+			document.getElementById("logo" + lnk).innerText = "http://ashospitality.com";
+			document.getElementById("fb" + lnk).innerText = "http://www.facebook.com/ashospitality/";
+			document.getElementById("tw" + lnk).innerText = "http://www.twitter.com/ashospitality";
+			document.getElementById("li" + lnk).innerText = "http://www.linkedin.com/company/a-s-hospitality";
+		} else {
+			document.getElementById("logo" + lnk).innerText = "http://www.dextersolutions.net";
+			document.getElementById("fb" + lnk).innerText = "http://www.facebook.com/branddelivery/";
+			document.getElementById("tw" + lnk).innerText = "http://www.twitter.com/branddelivery";
+			document.getElementById("li" + lnk).innerText = "http://www.linkedin.com/company/dexter-solutions";
+		}
+	}
+	function contact_update(eml) {
+		document.getElementById("email_field").href = "mailto:" + eml;
+		var hsname = eml.split("@")[0] + ".png";
+		var hsslot = document.getElementById("headshot_img");
+		hsslot.src = "http://marketing.dextersolutions.net/images/headshots/" + hsname;
+		hsslot.onerror = function() {
+			hsslot.src = "http://marketing.dextersolutions.net/images/headshots/ds-icon.png";
+		}
+	}	
+	function check_mobile(me) {
+		var mi = document.getElementById("mobile_indicator");
+		var mf = document.getElementById("mobile_field");
+		if (me.checked) {
+		    mi.innerHTML = "  m ";
+			mf.innerHTML = document.getElementById("mobile").value; }
+		else {
+		    mi.innerHTML = "";
+			mf.innerHTML = "";}
+	}
+	function check_banner(t,tov,toc) {
+		var bf = document.getElementById("b_field");
+		if (t.checked){
+			bf.innerHTML = '<a href="http://www2.dextersolutions.net/' + toc + '"><img src="http://marketing.dextersolutions.net/images/more/' + tov + '.jpg" style="display:inherit !important;"></a>'; }
+		else {
+			bf.innerHTML = "";
+		}
+	}
+</script>
+</head>
+  <body>
+  <div id="emailSignature">
+  <!-- Contact Information -->
+            	<span id="name_field">Name</span><br/>
+            	<span id="title_field">Title</span><br/>
+            	<span id="address_field">3493 Lamar Avenue, Memphis, TN 38118</span><br/>
+                <span>p </span><span id="phone_field">000.000.0000</span><span id="mobile_indicator"><br/>
+                m </span><span id="mobile_field" >000.000.0000</span><br/>
+                <a id="email_field">flast@dextersolutions.net</a> <br/><br/>      
+<!-- Branding -->
+	  <span>Website  ––&gt;  </span><span id="logo_link">http://www.dextersolutions.net</span><br/>
+	  <span>Facebook  ––&gt;  </span><span id="fb_link">http://www.facebook.com/branddelivery/</span><br/>
+      <span>Twitter  ––&gt;  </span><span  id="tw_link">http://www.twitter.com/branddelivery</span><br/>
+	  <span>LinkedIn  ––&gt; </span><span id="li_link">http://www.linkedin.com/company/dexter-solutions</span><br/>
+  </div>
+
+<!-- form -->
+    <div>
+    	<form name="form1" method="link" action="Email%20Signature%20Builder%20Tool.html" onkeypress="return event.keyCode != 13;" style="background-color:#eee; width:100%; height:100%; overflow: scroll; position:absolute; right:0px;top:0px; bottom:0px; z-index:2; border-radius:5px; box-shadow:0px 0px 3px #aaa;">
+        	<fieldset style="padding:15px 0px 15px 30px; border:solid 0px #aaa; border-radius:5px;">
+            	<div id="page-title">Text-Only Signature Builder&nbsp;&nbsp;<input style="background:#BBB; padding:0 10px; color:#ddd; text-decoration:none;" type="submit" id="I-Beam" value="&lt;&nbsp;&gt;"><input onclick="document.getElementsByName('form1')[0].action = 'Text%20Only%20Signature%20Builder%20Tool.html';" style="background:#BBB; padding:0 10px; color:#ddd; text-decoration:none;" type="submit" id="storing" value="SAVE"></div>
+            	<label for="brands" class="label">Branding</label>
+                <select id="branding" name="brands" onchange="update_brand(this.options[this.selectedIndex].value,this.id)">
+                	<option value="DSFOB">Dexter Solutions Family of Brands</option>
+                    <option value="ASH">A S Hospitality</option>/
+                </select>
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" onkeyUp="update(this.value,this.id)" onChange="update(this.value,this.id)">
+                <label for="title">Title</label>
+    			<input type="text" id="title" name="title" onkeyUp="update(this.value,this.id)">
+                <label for="address">Address</label>
+                <select id="address" name="address" onchange="showfield(this.options[this.selectedIndex].value); update(this.options[this.selectedIndex].innerHTML,this.id);">
+                	<option value="Memphis">3493 Lamar Ave, Memphis, TN 38118</option>
+                    <option value="Springfield">1701 S Enterprise Ave Suite 104, Springfield, MO 65804</option>
+                    <option value="KC">2944 Troost Ave, Kansas City, MO 64109</option>
+                    <option value="other">Other</option>
+                </select>
+				<span id="other" class="hidden" onkeyUp="update(document.getElementById('other_address').value,'address')"><br/><br/><label for="other">Other Address:</label> <input type="text" name="other" id="other_address"></span>
+                <br/>
+
+                <label for="phone">Phone</label>
+    			<input type="text" id="phone" name="phone" onkeyUp="update(this.value,this.id)">
+                <br/>
+                <label for="mobile" class="label">Mobile</label>
+                <label class="switch">
+                	<input type="checkbox" name="m_enabler" value="1" id="m_enable" checked onclick="check_mobile(this)">
+                	<span class="slider round"></span>
+				</label><br/>
+    			<input type="text" id="mobile" name="mobile" onkeyUp="update(this.value,this.id)">
+    			<br/>
+    			<label for="email">E-Mail</label>
+    			<input type="text" id="email" name="email" onkeyUp="update(this.value,this.id); contact_update(this.value);">
+        		<br/>
+				<label for="bannerOptions" class="label">Banner Advertisement</label>
+                <label class="switch">
+                	<input type="checkbox" name="b_enabler" value="1" id="b_enable" onclick="check_banner(this,document.getElementById('bannerOptions').options[document.getElementById('bannerOptions').selectedIndex].value, document.getElementById('bannerOptions').options[document.getElementById('bannerOptions').selectedIndex].dataset.comment);">
+                	<span class="slider round"></span>
+				</label><br/>
+                <select id="bannerOptions" name="bannerOptions" onchange="check_banner(document.getElementById('b_enable'),this.options[this.selectedIndex].value,this.options[this.selectedIndex].dataset.comment)">
+					<option value="merch-catalog" data-comment="bgtcat">Branded Guest Touchpoints</option>
+					<option value="FnB-catalog" data-comment="fb-cat">Food &amp; Beverage Programs</option>
+					<option value="shop-ash" data-comment="shopash">SHOP A S Hospitality</option>
+				</select>
+                <br/><br/>
+                <a href="Text Only Signature Builder Tool.html"><div class="button">Reset</div></a>
+                <div class="button" onclick="print_html();" id="ssc_button">show source code</div>
+                <div class="btn button" data-clipboard-action="copy" data-clipboard-target="#emailSignature" id="cstc_button">copy signature to clipboard</div><br/>
+				<script src="clipboard.min.js"></script>
+               <script>		   
+	var clipboard = new Clipboard('.btn');
+
+    clipboard.on('success', function(e) {
+        console.log(e);
+    });
+
+    clipboard.on('error', function(e) {
+        console.log(e);
+    });
+				</script>
+                <div id="outputHTML" class="codebox">
+        		</div>
+            </fieldset>
+        </form>
+    </div>
+	  <div id="version">Last Updated: <span id="modDate"></span></div>
+  </body>
+</html>
