@@ -103,10 +103,10 @@ a:not([href]).dropdown-item {
     left: .85rem;
     height: 62px;
   }
-  .title {
+  /*.title {
     transform: scale(.8);
     transform-origin: 348px 800px;
-  }
+  }*/
   .ball-1 {
     display: none;
   }
